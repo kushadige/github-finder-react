@@ -1,3 +1,121 @@
+# GitHub Finder React
+
+- Tailwind CSS
+- Context
+- Github Rest API
+- Daisy UI (Tailwind Plugin)
+- Reducers (useReducer)
+
+## Add daisyUI plugin to your react project
+
+1. Install Tailwind CSS
+
+    https://tailwindcss.com/docs/guides/create-react-app
+
+2. Install daisyUI
+    ```
+    npm i daisyui
+    ```
+3. Add daisyUI to your *tailwind.config.js* file.
+    ```json
+    module.exports = {
+    //...
+    plugins: [require("daisyui")],
+    }
+    ```
+
+## Use Context API for global states
+```js
+// ex: NameContext.js
+import { createContext } from 'react';
+
+const NameContext = createContext();
+
+export const NameProvider = ( {children} ) => {
+    // states..
+    // functions..
+
+    return <NameContext.Provider value={{
+        state1,
+        state2,
+        func1,
+        func2,
+        ...
+        ..
+    }}>
+        {children}
+    </NameContext.Provider>
+}
+
+export default NameContext;
+```
+
+## useReducer() hook instead of useState()
+* *create two file: ...Reducer.js / ...Context.js*
+
+**1. NameContext.js**
+```js
+import { createContext, useReducer } from 'react';
+import nameReducer from './NameReducer';
+
+const NameContext = createContext();
+
+export const NameProvider = ({ children }) => {
+    const initialState = {
+        state1: [],
+        state2: {},
+        state3: '',
+        state4: true
+    }
+
+    const [state, dispatch] = useReducer(nameReducer, initialState);
+
+    // functions...
+
+    return <NameContext.Provider value={{
+        arr: state.state1,
+        obj: state.state2,
+        name: state.state3,
+        isLoaded: state.state4
+    }}>
+        {children}
+    </NameContext.Provider>
+}
+```
+**2. NameReducer.js**
+```js
+const nameReducer = (state, action) => {
+    switch(action.type) {
+        case: 'SET_STATE1':
+            return {
+                ...state,
+                state1: action.payload,
+                state4: false
+            }
+        case: 'SET_STATE2':
+            return {
+                ...state,
+                state2: action.payload
+            }
+        case: 'SET_STATE3':
+            return {
+                ...state,
+                state3: 'Hello World!'
+            }
+        default:
+            return state;
+    }
+}
+
+export default nameReducer;
+```
+
+**Reducer** is a function which takes two args **state** and **action**.  
+
+The **action** is typically an object that has a **type** and the **type** is basically just a string that you can evaluate.  
+
+*It might have a **payload**.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
