@@ -9,7 +9,7 @@ import GithubContext from '../context/github/GithubContext';
 import Spinner from '../components/layout/Spinner';
 import RepoList from '../components/repos/RepoList';
 
-import { getSingleUser, getUserRepos } from '../context/github/GithubActions';
+import { getUserAndRepos } from '../context/github/GithubActions';
 
 function User(){
     const params = useParams();
@@ -20,11 +20,10 @@ function User(){
         dispatch({type: 'SET_LOADING'});
 
         const getUserData = async() => {
-            const userData = await getSingleUser(params.login);
-            dispatch({type: 'GET_USER', payload: userData});
+            const userData = await getUserAndRepos(params.login);
 
-            const reposData = await getUserRepos(params.login);
-            dispatch({type: 'GET_REPOS', payload: reposData});
+            dispatch({type: 'GET_USER', payload: userData.user});
+            dispatch({type: 'GET_REPOS', payload: userData.repos});
         }
 
         getUserData();
